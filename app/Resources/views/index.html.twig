@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <h1>Billetterie du Louvre</h1>
+
+    {{ form_start(form_billet) }}
+        {{ form_widget(form_billet) }}
+
+        <input type="submit" value="create_billet" class="" />
+    {{ form_end(form_billet) }}
+
+    {{ form_start(form_user) }}
+        {{ form_widget(form_user) }}
+        <input type="submit" value="create_user">
+
+    {{ form_end(form_user) }}
+{% endblock %}
