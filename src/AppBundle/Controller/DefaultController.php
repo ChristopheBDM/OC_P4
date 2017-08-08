@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Billet;
+use AppBundle\Form\BilletType;
+use AppBundle\Form\UserType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,9 +16,13 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-        ]);
+        $billet = new Billet();
+        $form_billet = $this->createForm(BilletType::class, $billet);
+        $form_user = $this->createForm(UserType::class, $billet);
+
+        return $this->render('index.html.twig', array(
+            'form_billet' => $form_billet->createView(),
+            'form_user' => $form_user->createView(),
+        ));
     }
 }
