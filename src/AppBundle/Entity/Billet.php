@@ -13,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 class Billet
 {
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Commande")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -85,11 +91,11 @@ class Billet
     private $tarifReduit;
 
     /**
-     * @var int
+     * @var integer
      *
-     * @ORM\Column(name="prix_total", type="integer")
+     * @ORM\Column(name="quantite", type="integer")
      */
-    private $prixTotal;
+    private $quantite;
 
 
     /**
@@ -319,27 +325,35 @@ class Billet
     }
 
     /**
-     * Set prixTotal
-     *
-     * @param integer $prixTotal
-     *
-     * @return Billet
+     * @return mixed
      */
-    public function setPrixTotal($prixTotal)
+    public function getCommande()
     {
-        $this->prixTotal = $prixTotal;
-
-        return $this;
+        return $this->commande;
     }
 
     /**
-     * Get prixTotal
-     *
-     * @return int
+     * @param mixed $commande
      */
-    public function getPrixTotal()
+    public function setCommande($commande)
     {
-        return $this->prixTotal;
+        $this->commande = $commande;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantite()
+    {
+        return $this->quantite;
+    }
+
+    /**
+     * @param mixed $quantite
+     */
+    public function setQuantite($quantite)
+    {
+        $this->quantite = $quantite;
     }
 }
 
