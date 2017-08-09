@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: Utilisateur
  * Date: 08/08/2017
- * Time: 09:40
+ * Time: 11:48
  */
 
 namespace AppBundle\Form;
@@ -11,7 +11,10 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Billet;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,25 +23,31 @@ class BilletType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('dateReza', DateType::class)
+            ->add('nomClient', TextType::class, array(
+                'label' => 'Nom'
+            ))
+            ->add('prenomClient', TextType::class, array(
+                'label' => 'Prénom'
+            ))
+            ->add('pays', TextType::class, array(
+                'label' => 'Pays'
+            ))
+            ->add('dateNaissance', DateType::class, array(
+                'label' => 'Date de naissance'
+            ))
+            ->add('mail', EmailType::class, array(
+                'label' => 'Adresse mail'
+            ))
             ->add('typeBillet', ChoiceType::class, array(
                 'choices' => array(
                     'Journée' => 1,
-                    'Demi-journée' => 2,
+                    'Demi-journée' => 2
                 ),
+                'label' => 'Type de billet'
             ))
-            ->add('quantite', ChoiceType::class, array(
-                'choices' => array(
-                    '1' => 1,
-                    '2' => 2,
-                    '3' => 3,
-                    '4' => 4,
-                    '5' => 5,
-                    '6' => 6,
-                    '7' => 7,
-                    '8' => 8,
-                    '9' => 9,
-                )
+            ->add('tarifReduit', CheckboxType::class, array(
+                'label' => 'Tarif réduit',
+                'required' => false
             ));
     }
 
