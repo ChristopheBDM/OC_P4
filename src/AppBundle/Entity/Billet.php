@@ -63,13 +63,6 @@ class Billet
     private $mail;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date_reza", type="date")
-     */
-    private $dateReza;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="type_billet", type="string", length=255)
@@ -89,13 +82,6 @@ class Billet
      * @ORM\Column(name="tarif_reduit", type="boolean")
      */
     private $tarifReduit;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="quantite", type="integer")
-     */
-    private $quantite;
 
 
     /**
@@ -229,30 +215,6 @@ class Billet
     }
 
     /**
-     * Set dateReza
-     *
-     * @param \DateTime $dateReza
-     *
-     * @return Billet
-     */
-    public function setDateReza($dateReza)
-    {
-        $this->dateReza = $dateReza;
-
-        return $this;
-    }
-
-    /**
-     * Get dateReza
-     *
-     * @return \DateTime
-     */
-    public function getDateReza()
-    {
-        return $this->dateReza;
-    }
-
-    /**
      * Set typeBillet
      *
      * @param string $typeBillet
@@ -338,22 +300,6 @@ class Billet
     public function setCommande($commande)
     {
         $this->commande = $commande;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuantite()
-    {
-        return $this->quantite;
-    }
-
-    /**
-     * @param mixed $quantite
-     */
-    public function setQuantite($quantite)
-    {
-        $this->quantite = $quantite;
     }
 }
 
