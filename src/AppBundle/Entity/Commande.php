@@ -28,11 +28,7 @@ class Commande
      */
     private $date;
 
-
-    public function __construct()
-    {
-        return $this->date = new \DateTime();
-    }
+    private $billets;
 
     /**
      * Get id
@@ -52,6 +48,19 @@ class Commande
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+    }
+
+    public function getBillets()
+    {
+        return $this->billets;
     }
 }
 
