@@ -20,7 +20,9 @@ class CommandeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date', DateType::class, array(
+            ->add('date_reza', DateType::class, array(
+                'widget' => 'choice',
+                'years' => range(date('Y'), date('Y') +10),
                 'label' => 'Date de visite'
             ))
             ->add('billets', CollectionType::class, array(
