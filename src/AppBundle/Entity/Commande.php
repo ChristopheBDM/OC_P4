@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +29,23 @@ class Commande
      */
     private $date;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date_reza", type="date")
+     */
+    private $datereza;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande")
+     */
     private $billets;
+
+    public function __construct()
+    {
+        $this->billets = new ArrayCollection();
+        $this->date = new \DateTime();
+    }
 
     /**
      * Get id
@@ -51,13 +68,24 @@ class Commande
     }
 
     /**
-     * @param \DateTime $date
+     * @return \DateTime
      */
-    public function setDate($date)
+    public function getDatereza()
     {
-        $this->date = $date;
+        return $this->datereza;
     }
 
+    /**
+     * @param \DateTime $datereza
+     */
+    public function setDatereza($datereza)
+    {
+        $this->datereza = $datereza;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getBillets()
     {
         return $this->billets;
