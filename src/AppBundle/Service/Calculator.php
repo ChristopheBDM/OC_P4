@@ -10,11 +10,22 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\Commande;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 
-class Calculator extends Controller
+class Calculator
 {
+    // camelCase pour var
+
+    /**
+     * @var array
+     */
+    private $listeTarifs;
+
+    public function __construct(array $listeTarifs)
+    {
+        $this->listeTarifs = $listeTarifs;
+    }
+
     public function ageCalculatorFromToday(\DateTime $dateInitiale)
     {
         return $dateInitiale->diff(new \DateTime())->format('%Y');
@@ -34,41 +45,16 @@ class Calculator extends Controller
         }
     }
 
-    // calculateur de prix en fonction d'un billet
-    public function priceCalculator($billet)
-    {
-        $liste_tarifs = $this->getParameter('liste_tarifs');
-
-        if ($billet['tarifReduit'] == true) {
-            return $liste_tarifs['tarif_reduit'];
-        } else {
-            $age = $this->ageCalculatorFromToday($billet['dateNaissance']);
-            return $liste_tarifs[$this->ageCategory($age)];
-        }
-    }
-
-    /*
-    // calculateur de prix en fonction d'une commande
     public function priceCalculator(Commande $commande)
     {
-        $liste_tarifs = $this->getParameter('liste_tarifs');
-        $a_billets = $commande->getBillets();
-
-        foreach ($a_billets as $billet)
+        foreach ($commande->getBillets() as $billet)
         {
-            if ($billet['tarifReduit'] == true) {
-                return $liste_tarifs['tarif_reduit'];
+            if ($billet->getTarifReduit() == true) {
+                $billet->setPrixBillet($this->listeTarifs['tarif_reduit']);
             } else {
-                $age = $this->ageCalculatorFromToday($billet['dateNaissance']);
-                return $liste_tarifs[$this->ageCategory($age)];
+                $age = $this->ageCalculatorFromToday($billet->getDateNaissance());
+                $billet->setPrixBillet($this->listeTarifs[$this->ageCategory($age)]);
             }
         }
-    }
-    */
-
-    public function getPrice()
-    {
-        $price = 10;
-        return $price;
     }
 }
