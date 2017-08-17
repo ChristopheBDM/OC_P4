@@ -5,22 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Billet
- *
  * @ORM\Table(name="billet")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\BilletRepository")
  */
 class Billet
 {
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Commande")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $commande;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -70,19 +60,24 @@ class Billet
     private $typeBillet;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="type_tarif", type="string", length=255)
-     */
-    private $typeTarif;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="tarif_reduit", type="boolean")
      */
     private $tarifReduit;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="prix_billet", type="integer")
+     */
+    private $prix_billet;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Commande", inversedBy="billets")
+     * @ORM\JoinColumn(name="commande_id", referencedColumnName="id")
+     */
+    private $commande;
 
     /**
      * Get id
@@ -239,30 +234,6 @@ class Billet
     }
 
     /**
-     * Set typeTarif
-     *
-     * @param string $typeTarif
-     *
-     * @return Billet
-     */
-    public function setTypeTarif($typeTarif)
-    {
-        $this->typeTarif = $typeTarif;
-
-        return $this;
-    }
-
-    /**
-     * Get typeTarif
-     *
-     * @return string
-     */
-    public function getTypeTarif()
-    {
-        return $this->typeTarif;
-    }
-
-    /**
      * Set tarifReduit
      *
      * @param boolean $tarifReduit
@@ -300,6 +271,22 @@ class Billet
     public function setCommande($commande)
     {
         $this->commande = $commande;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrixBillet()
+    {
+        return $this->prix_billet;
+    }
+
+    /**
+     * @param mixed $prix_billet
+     */
+    public function setPrixBillet($prix_billet)
+    {
+        $this->prix_billet = $prix_billet;
     }
 }
 
