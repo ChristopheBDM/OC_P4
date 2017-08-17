@@ -28,7 +28,9 @@ class CommandeType extends AbstractType
             ->add('billets', CollectionType::class, array(
                 'entry_type' => BilletType::class,
                 'allow_add' => true,
-                'allow_delete' => true
+                'allow_delete' => true,
+                // important poour collectionType
+                'by_reference' => false
             ));
     }
 
