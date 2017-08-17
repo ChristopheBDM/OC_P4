@@ -37,7 +37,7 @@ class Commande
     private $datereza;
 
     /**
-     * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande")
+     * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande", cascade={"persist"})
      */
     private $billets;
 
@@ -84,11 +84,22 @@ class Commande
     }
 
     /**
-     * @return mixed
+     * @return Billet[]
      */
     public function getBillets()
     {
         return $this->billets;
+    }
+
+    public function addBillet(Billet $billet)
+    {
+        $billet->setCommande($this);
+        $this->billets->add($billet);
+    }
+
+    public function removeBillet(Billet $billet)
+    {
+        $this->billets->removeElement($billet);
     }
 }
 
