@@ -1,6 +1,12 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
+    liste_tarifs:
+        tarif_normal: 16
+        tarif_enfant: 8
+        tarif_under4: 0
+        tarif_senior: 12
+        tarif_reduit: 10
     #parameter_name: value
 
 services:
