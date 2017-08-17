@@ -71,11 +71,11 @@ class Billet
      *
      * @ORM\Column(name="prix_billet", type="integer")
      */
-    private $prix_billet;
+    private $prixBillet;
 
     /**
      * @ORM\ManyToOne(targetEntity="Commande", inversedBy="billets")
-     * @ORM\JoinColumn(name="commande_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="commande_id", referencedColumnName="id", nullable=false)
      */
     private $commande;
 
@@ -278,15 +278,15 @@ class Billet
      */
     public function getPrixBillet()
     {
-        return $this->prix_billet;
+        return $this->prixBillet;
     }
 
     /**
      * @param mixed $prix_billet
      */
-    public function setPrixBillet($prix_billet)
+    public function setPrixBillet($prixBillet)
     {
-        $this->prix_billet = $prix_billet;
+        $this->prixBillet = $prixBillet;
     }
 }
 
