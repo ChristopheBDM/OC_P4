@@ -26,6 +26,33 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             $em = $this->getDoctrine()->getManager();
+            $repositoryCommande = $this->getDoctrine()->getRepository(Commande::class);
+            $repositoryBillet = $this->getDoctrine()->getRepository(Billet::class);
+
+            $commandesJour = $repositoryCommande->findBy(array(
+                'datereza' => $commande->getDatereza())
+            );
+            foreach ($commandesJour as $commandeJour) {
+                $listeId[] = $commandeJour->getId();
+            }
+            $billetsJour = $repositoryBillet->findBy(array(
+                'commande' => $listeId
+            ));
+            dump($billetsJour);
+
+            echo count($billetsJour);
+
+            if (count($billetsJour) > 1000) {
+                throw $this->createNotFoundException(
+                    'Le nombre de billets vendus pour la date sélectionnée est dépassée'
+                );
+            }
+
+            if ($this->get(Calculator::class)->datePassed($commande->getDatereza())) {
+                throw $this->createNotFoundException(
+                    'La date sélectionnée est passée'
+                );
+            }
             $this->get(Calculator::class)->priceCalculator($commande);
 
             $em->persist($commande);
