@@ -45,15 +45,24 @@ class Calculator
         }
     }
 
+    public function datePassed(\DateTime $dateReza)
+    {
+        $dateNow = new \DateTime('now');
+        return $dateReza < $dateNow;
+    }
+
     public function priceCalculator(Commande $commande)
     {
         foreach ($commande->getBillets() as $billet)
         {
+            // $tarif demi prend pour valeur 1 pour BilletJournée et 2 pour BilletDemiJournée
+            $tarifDemi = $billet->getTypeBillet();
+
             if ($billet->getTarifReduit() == true) {
-                $billet->setPrixBillet($this->listeTarifs['tarif_reduit']);
+                $billet->setPrixBillet($this->listeTarifs['tarif_reduit'] / $tarifDemi);
             } else {
                 $age = $this->ageCalculatorFromToday($billet->getDateNaissance());
-                $billet->setPrixBillet($this->listeTarifs[$this->ageCategory($age)]);
+                $billet->setPrixBillet($this->listeTarifs[$this->ageCategory($age)] / $tarifDemi);
             }
         }
     }
