@@ -13,7 +13,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -34,9 +33,6 @@ class BilletType extends AbstractType
             ))
             ->add('dateNaissance', BirthdayType::class, array(
                 'label' => 'Date de naissance'
-            ))
-            ->add('mail', EmailType::class, array(
-                'label' => 'Adresse mail'
             ))
             ->add('typeBillet', ChoiceType::class, array(
                 'choices' => array(
