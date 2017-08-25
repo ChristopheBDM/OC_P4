@@ -48,13 +48,6 @@ class Billet
     /**
      * @var string
      *
-     * @ORM\Column(name="mail", type="string", length=255)
-     */
-    private $mail;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="type_billet", type="string", length=255)
      */
     private $typeBillet;
@@ -183,30 +176,6 @@ class Billet
     public function getDateNaissance()
     {
         return $this->dateNaissance;
-    }
-
-    /**
-     * Set mail
-     *
-     * @param string $mail
-     *
-     * @return Billet
-     */
-    public function setMail($mail)
-    {
-        $this->mail = $mail;
-
-        return $this;
-    }
-
-    /**
-     * Get mail
-     *
-     * @return string
-     */
-    public function getMail()
-    {
-        return $this->mail;
     }
 
     /**
