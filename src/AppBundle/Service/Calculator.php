@@ -66,4 +66,16 @@ class Calculator
             }
         }
     }
+
+    public function random()
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $string = '';
+        $max = strlen($characters - 1);
+
+        for ($i = 0; $i <= 10; $i++) {
+            $string .= $characters[mt_rand(0, $max)];
+        }
+        return $string;
+    }
 }
