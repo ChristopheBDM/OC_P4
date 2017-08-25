@@ -37,6 +37,20 @@ class Commande
     private $datereza;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=255)
+     */
+    private $mail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="key", type="string", length=10)
+     */
+    private $key;
+
+    /**
      * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande", cascade={"persist"})
      */
     private $billets;
@@ -100,6 +114,49 @@ class Commande
     public function removeBillet(Billet $billet)
     {
         $this->billets->removeElement($billet);
+    }
+
+    public function getPrixTotal()
+    {
+        $montantTotal = 0;
+
+        foreach ( $this->getBillets() as $billet)
+        {
+            $montantTotal += $billet->getPrixBillet();
+        }
+        return $montantTotal;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * @param string $mail
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
+     * @param mixed $key
+     */
+    public function setKey($key)
+    {
+        $this->key = $key;
     }
 }
 
