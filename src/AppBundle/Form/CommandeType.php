@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class CommandeType extends AbstractType
 {
@@ -25,12 +26,16 @@ class CommandeType extends AbstractType
                 'years' => range(date('Y'), date('Y') +10),
                 'label' => 'Date de visite'
             ))
+            ->add('mail', EmailType::class, array(
+                'label' => 'Adresse mail'
+            ))
             ->add('billets', CollectionType::class, array(
                 'entry_type' => BilletType::class,
                 'allow_add' => true,
                 'allow_delete' => true,
                 // important poour collectionType
-                'by_reference' => false
+                'by_reference' => false,
+                'label' => ' '
             ));
     }
 
