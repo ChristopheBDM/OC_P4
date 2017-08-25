@@ -7,6 +7,7 @@ use AppBundle\Entity\Commande;
 use AppBundle\Form\CommandeType;
 use AppBundle\Service\Calculator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,31 +29,43 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $repositoryCommande = $this->getDoctrine()->getRepository(Commande::class);
             $repositoryBillet = $this->getDoctrine()->getRepository(Billet::class);
+            $commande->setKey($this->get(Calculator::class)->random());
+
+            $listeId = [];
 
             $commandesJour = $repositoryCommande->findBy(array(
                 'datereza' => $commande->getDatereza())
             );
+
             foreach ($commandesJour as $commandeJour) {
                 $listeId[] = $commandeJour->getId();
             }
-            $billetsJour = $repositoryBillet->findBy(array(
-                'commande' => $listeId
-            ));
-            dump($billetsJour);
 
-            echo count($billetsJour);
+            if ($listeId != null) {
+                $billetsJour = $repositoryBillet->findBy(array(
+                    'commande' => $listeId
+                ));
+                dump($billetsJour);
 
-            if (count($billetsJour) > 1000) {
-                throw $this->createNotFoundException(
-                    'Le nombre de billets vendus pour la date sélectionnée est dépassée'
-                );
+                echo count($billetsJour);
+
+                if (count($billetsJour) > 1000) {
+                    $this->addFlash(
+                        'error',
+                        'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
+                    );
+                    return $this->redirectToRoute('add_commande');
+                }
             }
 
             if ($this->get(Calculator::class)->datePassed($commande->getDatereza())) {
-                throw $this->createNotFoundException(
+                $this->addFlash(
+                    'error',
                     'La date sélectionnée est passée'
                 );
+                return $this->redirectToRoute('add_commande');
             }
+
             $this->get(Calculator::class)->priceCalculator($commande);
 
             $em->persist($commande);
@@ -74,25 +87,70 @@ class DefaultController extends Controller
      * @param $id
      * @return Response
      */
-    public function showCommandeAction($id)
+    public function showCommandeAction(Commande $commande)
     {
-        $commande = $this->getDoctrine()
-            ->getRepository(Commande::class)
-            ->find($id);
-
-        $billets = $this->getDoctrine()
-            ->getRepository(Billet::class)
-            ->findBy(array('commande' => $commande->getId()));
-
-        if (!$commande) {
-            throw $this->createNotFoundException(
-                'Pas de commande avec l\'id ' . $id
-            );
-        }
-
-        return $this->render('confirm_view.html.twig', array(
+        return $this->render('payment.html.twig', array(
             'commande' => $commande,
-            'billets' => $billets
+        ));
+    }
+
+    /**
+     * @Route("/checkout/{id}", name="order_checkout", methods="POST")
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+
+    public function checkoutAction(Commande $commande)
+    {
+        Stripe::setApiKey('sk_test_fuWg21NaTTnINaBbLI0xG0vg');
+
+        // Get the credit card details submitted by the form
+        $token = $_POST['stripeToken'];
+
+        // Create a charge: this will charge the user's card
+        try {
+            $charge = \Stripe\Charge::create(array(
+                "amount" => $commande->getPrixTotal()*100, // Amount in cents
+                "currency" => "eur",
+                "source" => $token,
+                "description" => "Paiement Stripe - OpenClassrooms Exemple"
+            ));
+            $this->addFlash("success","Paiement accepté");
+            return $this->redirectToRoute("order_confirmation", array(
+                'id' => $commande->getId())
+            );
+        } catch(\Stripe\Error\Card $e) {
+
+            $this->addFlash("error","Erreur lors du paiement");
+            return $this->redirectToRoute("order_checkout");
+            // The card has been declined
+        }
+    }
+
+    /**
+     * @Route("/confirmation/{id}", name="order_confirmation")
+     * @param $id
+     */
+
+    public function sendConfirmationMailAction(Commande $commande)
+    {
+        $mailer = $this->get('mailer');
+        $message = (new \Swift_Message('Confirmation de commande'))
+            ->setFrom('christophe.barnet@gmail.com')
+            ->setTo($commande->getMail())
+            ->setBody(
+                $this->renderView(
+                    ':Emails:confirmation_mail.html.twig',
+                    array(
+                        'commande' => $commande
+                    )
+                ),
+                'text/html'
+            );
+        $mailer->send($message);
+
+        return $this->render('confirmation.html.twig', array(
+            'commande' => $commande
         ));
     }
 }
