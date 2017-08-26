@@ -46,9 +46,9 @@ class Commande
     /**
      * @var string
      *
-     * @ORM\Column(name="key", type="string", length=10)
+     * @ORM\Column(name="random", type="string", length=255)
      */
-    private $key;
+    private $random;
 
     /**
      * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande", cascade={"persist"})
@@ -146,17 +146,17 @@ class Commande
     /**
      * @return mixed
      */
-    public function getKey()
+    public function getRandom()
     {
-        return $this->key;
+        return $this->random;
     }
 
     /**
-     * @param mixed $key
+     * @param mixed $random
      */
-    public function setKey($key)
+    public function setRandom($random)
     {
-        $this->key = $key;
+        $this->random = $random;
     }
 }
 
