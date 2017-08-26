@@ -29,39 +29,28 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $repositoryCommande = $this->getDoctrine()->getRepository(Commande::class);
             $repositoryBillet = $this->getDoctrine()->getRepository(Billet::class);
-            $commande->setKey($this->get(Calculator::class)->random());
-
-            $listeId = [];
-
-            $commandesJour = $repositoryCommande->findBy(array(
-                'datereza' => $commande->getDatereza())
-            );
-
-            foreach ($commandesJour as $commandeJour) {
-                $listeId[] = $commandeJour->getId();
-            }
-
-            if ($listeId != null) {
-                $billetsJour = $repositoryBillet->findBy(array(
-                    'commande' => $listeId
-                ));
-                dump($billetsJour);
-
-                echo count($billetsJour);
-
-                if (count($billetsJour) > 1000) {
-                    $this->addFlash(
-                        'error',
-                        'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
-                    );
-                    return $this->redirectToRoute('add_commande');
-                }
-            }
+            $commande->setRandom($this->get(Calculator::class)->random());
 
             if ($this->get(Calculator::class)->datePassed($commande->getDatereza())) {
                 $this->addFlash(
                     'error',
                     'La date sélectionnée est passée'
+                );
+                return $this->redirectToRoute('add_commande');
+            }
+
+            if ($this->get(Calculator::class)->isNotWorkable($commande->getDatereza())) {
+                $this->addFlash(
+                    'error',
+                    'La date sélectionnée est un jour férié'
+                );
+                return $this->redirectToRoute('add_commande');
+            }
+
+            if ($this->get(Calculator::class)->overSellForADay($repositoryCommande, $repositoryBillet, $commande)) {
+                $this->addFlash(
+                    'error',
+                    'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
                 );
                 return $this->redirectToRoute('add_commande');
             }
@@ -103,6 +92,7 @@ class DefaultController extends Controller
     public function checkoutAction(Commande $commande)
     {
         Stripe::setApiKey('sk_test_fuWg21NaTTnINaBbLI0xG0vg');
+
 
         // Get the credit card details submitted by the form
         $token = $_POST['stripeToken'];
