@@ -4,34 +4,45 @@
 
 {% block body %}
 
-    {{ dump(commande) }}
+    <div class="container">
+        <div class="backgroundOpacity col-sm-offset-1 col-sm-10">
+            <div class="col-sm-6">
+                <div class="row">
+                    <p>Date de visite : {{ commande.datereza|date('d/m/Y') }}</p>
+                    <p>Adresse mail de contact : {{ commande.mail }}</p>
+                </div>
+                <div class="row">
+                    <h3>Récapitulatif de votre commande :</h3>
+                    {% for billet in commande.billets %}
+                        <ul>
+                            <li>Nom : {{ billet.nomClient }}</li>
+                            <li>Prénom : {{ billet.prenomClient }}</li>
+                            <li>Prix du billet : {{ billet.prixBillet }} €</li>
+                        </ul>
+                    {% endfor %}
+                </div>
 
-    <p>Date de visite : {{ commande.datereza|date('d/m/Y') }}</p>
-    <p>Adresse mail de contact : {{ commande.mail }}</p>
 
-    Liste des billets :
-    {% for billet in commande.billets %}
-        <ul>
-            <li>Nom : {{ billet.nomClient }}</li>
-            <li>Prénom : {{ billet.prenomClient }}</li>
-            <li>Prix du billet : {{ billet.prixBillet }}</li>
-        </ul>
-    {% endfor %}
+                <h3>Prix total de la commande : {{ commande.prixTotal }} €</h3>
 
-    <h3>Prix total : {{ commande.prixTotal }}</h3>
-
-    <div id="status">
-        <form action="{{ path('order_checkout', {'id': commande.id}) }}" method="POST">
-            <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_XEUkd5Tnn470Zo4nUXESEveZ"
-                    data-amount={{ commande.prixTotal * 100 }}
-                    data-name="oc-stripe"
-                    data-description="Widget"
-                    data-locale="auto"
-                    data-currency="eur">
-            </script>
-        </form>
+                <div class="row boutonPaiement">
+                    <form action="{{ path('order_checkout', {'id': commande.id}) }}" method="POST">
+                        <script
+                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="pk_test_XEUkd5Tnn470Zo4nUXESEveZ"
+                                data-amount={{ commande.prixTotal * 100 }}
+                                data-name="Louvre-Billetterie"
+                                data-description="Informations de paiement"
+                                data-locale="auto"
+                                data-currency="eur">
+                        </script>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <img src="{{ asset('img/Rmn-Grand-Palais-250.png') }}" alt="logo du louvre" class="col-sm-offset-3" style="margin-top: 40px" />
+            </div>
+        </div>
     </div>
 
 {% endblock %}
