@@ -1,5 +1,6 @@
 {
     "name": "utilisateur/oc_p4",
+    "description": "Application de billetterie",
     "license": "proprietary",
     "type": "project",
     "autoload": {

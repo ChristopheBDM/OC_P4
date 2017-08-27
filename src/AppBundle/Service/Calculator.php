@@ -52,7 +52,7 @@ class Calculator
         return $dateReza < $dateNow;
     }
 
-    function isNotWorkable(\DateTime $date)
+    public function isNotWorkable(\DateTime $date)
     {
         $year = date('Y',$date->getTimestamp());
 
@@ -93,7 +93,7 @@ class Calculator
             $listeId[] = $commandeJour->getId();
         }
 
-        if ($listeId != null) {
+        if ($listeId !== null) {
             $billetsJour = $repositoryBillet->findBy(array(
                 'commande' => $listeId
             ));
@@ -131,7 +131,7 @@ class Calculator
             // $tarif demi prend pour valeur 1 pour BilletJournée et 2 pour BilletDemiJournée
             $tarifDemi = $billet->getTypeBillet();
 
-            if ($billet->getTarifReduit() == true) {
+            if ($billet->getTarifReduit() === true) {
                 $billet->setPrixBillet($this->listeTarifs['tarif_reduit'] / $tarifDemi);
             } else {
                 $age = $this->ageCalculatorFromToday($billet->getDateNaissance());
@@ -143,9 +143,6 @@ class Calculator
     public function random()
     {
         $string = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 1).substr(md5(time()),1);
-
         return $string;
-
-
     }
 }

@@ -53,5 +53,4 @@ class BilletType extends AbstractType
             'data_class' => Billet::class,
         ));
     }
-
 }

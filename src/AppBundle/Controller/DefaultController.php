@@ -47,7 +47,7 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('add_commande');
             }
 
-            if ($this->get(Calculator::class)->overSellForADay($repositoryCommande, $repositoryBillet, $commande)) {
+            if ($this->get(Calculator::class)->overSellForADay( $repositoryCommande, $repositoryBillet, $commande)) {
                 $this->addFlash(
                     'notice',
                     'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
@@ -100,7 +100,6 @@ class DefaultController extends Controller
     public function checkoutAction(Commande $commande)
     {
         Stripe::setApiKey('sk_test_fuWg21NaTTnINaBbLI0xG0vg');
-
 
         // Get the credit card details submitted by the form
         $token = $_POST['stripeToken'];
