@@ -32,7 +32,8 @@ class BilletType extends AbstractType
                 'label' => 'Pays'
             ))
             ->add('dateNaissance', BirthdayType::class, array(
-                'label' => 'Date de naissance'
+                'label' => 'Date de naissance',
+                'format'=> 'dd MM yyyy'
             ))
             ->add('typeBillet', ChoiceType::class, array(
                 'choices' => array(
