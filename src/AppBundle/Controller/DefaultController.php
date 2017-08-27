@@ -33,7 +33,7 @@ class DefaultController extends Controller
 
             if ($this->get(Calculator::class)->datePassed($commande->getDatereza())) {
                 $this->addFlash(
-                    'error',
+                    'notice',
                     'La date sélectionnée est passée'
                 );
                 return $this->redirectToRoute('add_commande');
@@ -41,7 +41,7 @@ class DefaultController extends Controller
 
             if ($this->get(Calculator::class)->isNotWorkable($commande->getDatereza())) {
                 $this->addFlash(
-                    'error',
+                    'notice',
                     'La date sélectionnée est un jour férié'
                 );
                 return $this->redirectToRoute('add_commande');
@@ -49,8 +49,16 @@ class DefaultController extends Controller
 
             if ($this->get(Calculator::class)->overSellForADay($repositoryCommande, $repositoryBillet, $commande)) {
                 $this->addFlash(
-                    'error',
+                    'notice',
                     'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
+                );
+                return $this->redirectToRoute('add_commande');
+            }
+
+            if ($this->get(Calculator::class)->halfDayWarning($commande->getDatereza(), $commande->getBillets())) {
+                $this->addFlash(
+                    'notice',
+                    'Un billet de type "journée" ne peut être acheté après 14H, désolé'
                 );
                 return $this->redirectToRoute('add_commande');
             }
