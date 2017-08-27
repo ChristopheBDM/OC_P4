@@ -10,15 +10,10 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% for message in app.flashes('notice') %}
-            <div class="flash-notice alert col-sm-12">
-                {{ message }}
-            </div>
-        {% endfor %}
         {% block body %}{% endblock %}
         {% block javascripts %}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
             <script src="{{ asset('js/function.js') }}"></script>
         {% endblock %}
     </body>
