@@ -1,0 +1,34 @@
+body {
+    background: aliceblue url("Louvre-Museum-Paris.jpg") center fixed no-repeat;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+#secondFormContainer {
+    width: 50%;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.backgroundOpacity {
+    margin-top: 200px;
+    background-color: rgba(240, 248, 255, 0.8);
+}
+
+p {
+    font-style: italic;
+    font-size: 1.1em;
+}
+
+li {
+    font-weight: bold;
+}
+
+.boutonPaiement {
+    margin: auto;
+    padding: 20px 0 35px 0;
+}
