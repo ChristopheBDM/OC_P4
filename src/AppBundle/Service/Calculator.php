@@ -48,7 +48,7 @@ class Calculator
 
     public function datePassed(\DateTime $dateReza)
     {
-        $dateNow = new \DateTime('now');
+        $dateNow = new \DateTime('yesterday 23:59');
         return $dateReza < $dateNow;
     }
 
@@ -97,14 +97,31 @@ class Calculator
             $billetsJour = $repositoryBillet->findBy(array(
                 'commande' => $listeId
             ));
-            dump($billetsJour);
-
-            echo count($billetsJour);
-
             if (count($billetsJour) > 1000) {
                 return true;
             }
         }
+    }
+
+    public function halfDayWarning(\DateTime $dateReza, $billets)
+    {
+        $dateNow = new \DateTime('now');
+        $dateReza = $dateReza->format('Y-m-d');
+        $dateNow = $dateNow->format('Y-m-d');
+        $listeTypeBillets = [];
+
+        foreach ($billets as $billet) {
+            $listeTypeBillets[] = $billet->getTypeBillet();
+        }
+
+        if ($dateReza == $dateNow && in_array(1, $listeTypeBillets)) {
+            $myTime = date('Y-m-d H:i', mktime(14, 0, 0));
+            $myTime = strtotime($myTime);
+
+            if(time() > $myTime){
+                return true;
+            }
+        } else {return false;}
     }
 
     public function priceCalculator(Commande $commande)
