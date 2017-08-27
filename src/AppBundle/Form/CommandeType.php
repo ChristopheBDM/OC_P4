@@ -22,8 +22,7 @@ class CommandeType extends AbstractType
     {
         $builder
             ->add('date_reza', DateType::class, array(
-                'widget' => 'choice',
-                'years' => range(date('Y'), date('Y') +10),
+                'widget' => 'single_text',
                 'label' => 'Date de visite'
             ))
             ->add('mail', EmailType::class, array(
