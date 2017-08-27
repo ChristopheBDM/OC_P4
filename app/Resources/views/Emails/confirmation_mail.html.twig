@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Confirmation de commande
+{% endblock %}
+
+{% block body %}
+    <h1>Musée du Louvre</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/fr/d/d1/Rmn-Grand-Palais.png" alt="logo du louvre" height="250px" width="250px">
+
+    <h3>Date de votre visite : {{ commande.datereza|date('d/m/Y') }}</h3>
+    <h3>Montant total de votre commande : {{ commande.prixTotal }} €</h3>
+    <h3>Liste des visiteurs :</h3>
+    <ul>
+    {% for billet in commande.billets %}
+        <li>{{ billet.prenomClient }} {{ billet.nomClient }}</li>
+    {% endfor %}
+    </ul>
+    <h3>Votre code de réservation : {{ commande.random }}</h3>
+
+{% endblock %}
