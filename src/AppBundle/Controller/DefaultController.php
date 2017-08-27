@@ -147,7 +147,8 @@ class DefaultController extends Controller
         $mailer->send($message);
 
         return $this->render('confirmation.html.twig', array(
-            'commande' => $commande
+            'commande' => $commande,
+            'billets' => $commande->getBillets()
         ));
     }
 }
