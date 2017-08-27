@@ -1,20 +1,33 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
 
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
 
-    <h1>Billetterie du Louvre</h1>
+    <div class="container">
+        <h1>Billetterie du Louvre</h1>
 
-    {{ form_start(form) }}
+        <div class="well">
+            {% for message in app.flashes('notice') %}
+                <div class="flash-notice alert col-sm-12">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {{ form_start(form) }}
 
-        {{ form_widget(form) }}
-        <input type="submit" value="Valider" class="" />
+            {{ form_widget(form, { 'attr': {'class': 'col-sm-offset-2 col-sm-8'} }) }}
 
-        <h3>Coordonnées du visiteur</h3>
-        <div class="form_billet"></div>
-        <a href="#" id="add_category" class="btn btn-default">Ajouter un billet</a>
+            <div id="secondFormContainer" class="row">
+                <div class="form_billet"></div>
+                <a href="#" id="add_category" class="btn btn-info">Ajouter un billet</a>
+            </div>
+            <div class="row">
+                <input type="submit" value="Valider" class="btn btn-primary btn-lg col-sm-offset-8" />
+            </div>
 
-    {{ form_end(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
 
 {% endblock %}
