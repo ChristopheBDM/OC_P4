@@ -25,11 +25,9 @@ $(document).ready(function() {
 
     // La fonction qui ajoute un formulaire CategoryType
     function addCategory($container) {
-        // Dans le contenu de l'attribut « data-prototype », on remplace :
-        // - le texte "__name__label__" qu'il contient par le label du champ
-        // - le texte "__name__" qu'il contient par le numéro du champ
+
         var template = $container.attr('data-prototype')
-            .replace(/__name__label__/g, 'Billet n°' + (index+1))
+            .replace(/__name__label__/g, 'Saisir les coordonnées du visiteur')
             .replace(/__name__/g,        index)
         ;
 
