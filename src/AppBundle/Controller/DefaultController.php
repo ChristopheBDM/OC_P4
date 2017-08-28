@@ -113,6 +113,10 @@ class DefaultController extends Controller
                 "description" => "Paiement Stripe - OpenClassrooms Exemple"
             ));
             $this->addFlash("success","Paiement accepté");
+            $commande->setPayed(true);
+            $this->getDoctrine()->getManager()->persist($commande);
+            $this->getDoctrine()->getManager()->flush();
+
             return $this->redirectToRoute("order_confirmation", array(
                 'id' => $commande->getId())
             );
@@ -131,6 +135,9 @@ class DefaultController extends Controller
 
     public function sendConfirmationMailAction(Commande $commande)
     {
+        if(!$commande->isPayed()) {
+            throw new \Exception('Le paiment n\'est pas validé');
+        }
         $mailer = $this->get('mailer');
         $message = (new \Swift_Message('Confirmation de commande'))
             ->setFrom('christophe.barnet@gmail.com')
