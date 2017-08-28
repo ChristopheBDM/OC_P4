@@ -2,10 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Billet;
 use AppBundle\Entity\Commande;
 use AppBundle\Form\CommandeType;
 use AppBundle\Service\Calculator;
+use AppBundle\Service\CodeGenerator;
+use AppBundle\Service\DateValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -27,11 +28,9 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid())
         {
             $em = $this->getDoctrine()->getManager();
-            $repositoryCommande = $this->getDoctrine()->getRepository(Commande::class);
-            $repositoryBillet = $this->getDoctrine()->getRepository(Billet::class);
-            $commande->setRandom($this->get(Calculator::class)->random());
+            $commande->setRandom($this->get(CodeGenerator::class)->random());
 
-            if ($this->get(Calculator::class)->datePassed($commande->getDatereza())) {
+            if ($this->get(DateValidator::class)->datePassed($commande->getDatereza())) {
                 $this->addFlash(
                     'notice',
                     'La date sélectionnée est passée'
@@ -39,7 +38,7 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('add_commande');
             }
 
-            if ($this->get(Calculator::class)->isNotWorkable($commande->getDatereza())) {
+            if ($this->get(DateValidator::class)->isNotWorkable($commande->getDatereza())) {
                 $this->addFlash(
                     'notice',
                     'La date sélectionnée est un jour férié'
@@ -47,7 +46,7 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('add_commande');
             }
 
-            if ($this->get(Calculator::class)->overSellForADay( $repositoryCommande, $repositoryBillet, $commande)) {
+            if ($this->get(DateValidator::class)->overSellForADay($commande)) {
                 $this->addFlash(
                     'notice',
                     'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
@@ -55,7 +54,7 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('add_commande');
             }
 
-            if ($this->get(Calculator::class)->halfDayWarning($commande->getDatereza(), $commande->getBillets())) {
+            if ($this->get(DateValidator::class)->halfDayWarning($commande->getDatereza(), $commande->getBillets())) {
                 $this->addFlash(
                     'notice',
                     'Un billet de type "journée" ne peut être acheté après 14H, désolé'
@@ -97,16 +96,17 @@ class DefaultController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
 
-    public function checkoutAction(Commande $commande)
+    public function checkoutAction(Commande $commande, Request $request)
     {
         Stripe::setApiKey('sk_test_fuWg21NaTTnINaBbLI0xG0vg');
 
         // Get the credit card details submitted by the form
-        $token = $_POST['stripeToken'];
+        // use $request->get('stripeToken') à la place de $_POST['stripeToken']
+        $token = $request->get('stripeToken');
 
         // Create a charge: this will charge the user's card
         try {
-            $charge = \Stripe\Charge::create(array(
+            \Stripe\Charge::create(array(
                 "amount" => $commande->getPrixTotal()*100, // Amount in cents
                 "currency" => "eur",
                 "source" => $token,
@@ -114,7 +114,6 @@ class DefaultController extends Controller
             ));
             $this->addFlash("success","Paiement accepté");
             $commande->setPayed(true);
-            $this->getDoctrine()->getManager()->persist($commande);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute("order_confirmation", array(
@@ -123,7 +122,9 @@ class DefaultController extends Controller
         } catch(\Stripe\Error\Card $e) {
 
             $this->addFlash("error","Erreur lors du paiement");
-            return $this->redirectToRoute("order_checkout");
+            return $this->redirectToRoute("order_checkout", array(
+                'id' => $commande->getId()
+            ));
             // The card has been declined
         }
     }
@@ -136,9 +137,10 @@ class DefaultController extends Controller
     public function sendConfirmationMailAction(Commande $commande)
     {
         if(!$commande->isPayed()) {
-            throw new \Exception('Le paiment n\'est pas validé');
+            return $this->redirectToRoute("commande_show", array(
+                'id' => $commande->getId()
+            ));
         }
-        $mailer = $this->get('mailer');
         $message = (new \Swift_Message('Confirmation de commande'))
             ->setFrom('christophe.barnet@gmail.com')
             ->setTo($commande->getMail())
@@ -151,11 +153,10 @@ class DefaultController extends Controller
                 ),
                 'text/html'
             );
-        $mailer->send($message);
+        $this->get('mailer')->send($message);
 
         return $this->render('confirmation.html.twig', array(
-            'commande' => $commande,
-            'billets' => $commande->getBillets()
+            'commande' => $commande
         ));
     }
 }
