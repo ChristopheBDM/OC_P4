@@ -44,3 +44,17 @@ services:
         public: true
         arguments:
             $listeTarifs: %liste_tarifs%
+
+    AppBundle\Service\CodeGenerator:
+        public: true
+
+    AppBundle\Service\DateValidator:
+        public: true
+
+    AppBundle\Repository\CommandeRepository:
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments: ['AppBundle\Entity\Commande']
+
+    AppBundle\Repository\BilletRepository:
+        factory: 'doctrine.orm.entity_manager:getRepository'
+        arguments: ['AppBundle\Entity\Billet']
