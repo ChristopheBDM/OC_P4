@@ -4,6 +4,7 @@
 
 {% block body %}
 
+    {% set tarifReduit = "" %}
     <div class="container">
         <div class="backgroundOpacity col-sm-offset-1 col-sm-10">
             <div class="col-sm-6">
@@ -18,6 +19,7 @@
                             <li>Nom : {{ billet.nomClient }}</li>
                             <li>Prénom : {{ billet.prenomClient }}</li>
                             <li>Prix du billet : {{ billet.prixBillet }} €</li>
+                            {% set tarifReduit = tarifReduit + billet.tarifReduit %}
                         </ul>
                     {% endfor %}
                 </div>
@@ -40,7 +42,14 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <img src="{{ asset('img/Rmn-Grand-Palais-250.png') }}" alt="logo du louvre" class="col-sm-offset-3" style="margin-top: 40px" />
+                <div class="row">
+                    <img src="{{ asset('img/Rmn-Grand-Palais-250.png') }}" alt="logo du louvre" class="col-sm-offset-3" style="margin-top: 40px" />
+                </div>
+                <div class="row">
+                    {% if tarifReduit > 0 %}
+                    <p class="col-sm-offset-2 col-sm-8">Pensez à vous munir d'un justificatif du tarif réduit le jour de votre visite.</p>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
