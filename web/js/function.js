@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('.stripe-button-el span').text('Payer en carte');
+
     // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
     var $container = $('div#commande_billets');
 
@@ -22,9 +24,7 @@ $(document).ready(function() {
             addDeleteLink($(this));
         });
     }
-
-
-
+    
     // La fonction qui ajoute un formulaire CategoryType
     function addCategory($container) {
 
