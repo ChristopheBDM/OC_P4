@@ -51,6 +51,13 @@ class Commande
     private $random;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="payed", type="boolean")
+     */
+    private $payed;
+
+    /**
      * @ORM\OneToMany(targetEntity="Billet", mappedBy="commande", cascade={"persist"})
      */
     private $billets;
@@ -157,6 +164,22 @@ class Commande
     public function setRandom($random)
     {
         $this->random = $random;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPayed()
+    {
+        return $this->payed;
+    }
+
+    /**
+     * @param bool $payed
+     */
+    public function setPayed($payed)
+    {
+        $this->payed = $payed;
     }
 }
 
