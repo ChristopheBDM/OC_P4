@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 
+use AppBundle\Entity\Commande;
 use AppBundle\Repository\BilletRepository;
 use AppBundle\Repository\CommandeRepository;
 
@@ -44,7 +45,7 @@ class DateValidator
         } else {return false;}
     }
 
-    public function overSellForADay($commande)
+    public function overSellForADay(Commande $commande)
     {
         $listeId = [];
 
