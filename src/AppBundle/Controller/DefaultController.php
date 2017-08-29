@@ -38,10 +38,11 @@ class DefaultController extends Controller
                 return $this->redirectToRoute('add_commande');
             }
 
-            if ($this->get(DateValidator::class)->isNotWorkable($commande->getDatereza())) {
+            if ($this->get(DateValidator::class)->isNotWorkable($commande->getDatereza()) ||
+                $this->get(DateValidator::class)->sundayIsClose($commande->getDatereza())) {
                 $this->addFlash(
                     'notice',
-                    'La date sélectionnée est un jour férié'
+                    'La date sélectionnée est un jour férié ou un dimanche'
                 );
                 return $this->redirectToRoute('add_commande');
             }
