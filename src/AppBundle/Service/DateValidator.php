@@ -95,6 +95,14 @@ class DateValidator
         return in_array($date->getTimestamp(), $holidays);
     }
 
+    public function sundayIsClose(\DateTime $dateReza)
+    {
+        if (date('l', $dateReza->getTimestamp()) == 'Sunday')
+        {
+            return true;
+        }
+    }
+
     public function datePassed(\DateTime $dateReza)
     {
         $dateNow = new \DateTime('yesterday 23:59');
