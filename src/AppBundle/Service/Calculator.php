@@ -24,7 +24,6 @@ class Calculator
     public function __construct(array $listeTarifs)
     {
         $this->listeTarifs = $listeTarifs;
-
     }
 
     public function ageCalculatorFromToday(\DateTime $dateInitiale)
