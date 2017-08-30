@@ -6,7 +6,7 @@
  * Time: 11:48
  */
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Billet;
 use Symfony\Component\Form\AbstractType;

@@ -6,7 +6,7 @@
  * Time: 09:40
  */
 
-namespace AppBundle\Form;
+namespace AppBundle\Form\Type;
 
 use AppBundle\Entity\Commande;
 use Symfony\Component\Form\AbstractType;

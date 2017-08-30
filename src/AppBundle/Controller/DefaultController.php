@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Commande;
-use AppBundle\Form\CommandeType;
+use AppBundle\Form\Type\CommandeType;
 use AppBundle\Service\Calculator;
 use AppBundle\Service\CodeGenerator;
 use AppBundle\Service\DateValidator;
