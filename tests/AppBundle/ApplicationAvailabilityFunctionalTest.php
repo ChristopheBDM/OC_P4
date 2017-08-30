@@ -28,9 +28,7 @@ class ApplicationAvailabilityFunctionalTest extends WebTestCase
     {
         return array(
             array('/'),
-            array('/show/{id}'),
-            array('/checkout/{id}'),
-            array('/confirmation/{id}')
+            array('/show/15')
         );
     }
 }
