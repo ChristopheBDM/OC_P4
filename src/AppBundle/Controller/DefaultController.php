@@ -30,39 +30,6 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $commande->setRandom($this->get(CodeGenerator::class)->random());
 
-            if ($this->get(DateValidator::class)->datePassed($commande->getDatereza())) {
-                $this->addFlash(
-                    'notice',
-                    'La date sélectionnée est passée'
-                );
-                return $this->redirectToRoute('add_commande');
-            }
-
-            if ($this->get(DateValidator::class)->isNotWorkable($commande->getDatereza()) ||
-                $this->get(DateValidator::class)->sundayIsClose($commande->getDatereza())) {
-                $this->addFlash(
-                    'notice',
-                    'La date sélectionnée est un jour férié ou un dimanche'
-                );
-                return $this->redirectToRoute('add_commande');
-            }
-
-            if ($this->get(DateValidator::class)->overSellForADay($commande)) {
-                $this->addFlash(
-                    'notice',
-                    'Le nombre de billets vendus pour la date sélectionnée est dépassé !'
-                );
-                return $this->redirectToRoute('add_commande');
-            }
-
-            if ($this->get(DateValidator::class)->halfDayWarning($commande->getDatereza(), $commande->getBillets())) {
-                $this->addFlash(
-                    'notice',
-                    'Un billet de type "journée" ne peut être acheté après 14H, désolé'
-                );
-                return $this->redirectToRoute('add_commande');
-            }
-
             $this->get(Calculator::class)->priceCalculator($commande);
 
             $em->persist($commande);
