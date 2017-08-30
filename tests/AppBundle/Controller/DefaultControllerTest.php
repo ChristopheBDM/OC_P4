@@ -6,13 +6,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class DefaultControllerTest extends WebTestCase
 {
-    public function testIndex()
+    public function testShowAction()
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/');
+        $crawler = $client->request('GET', '/show/15');
 
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
-        $this->assertContains('Welcome to Symfony', $crawler->filter('#container h1')->text());
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Date de visite")')->count()
+        );
     }
 }
