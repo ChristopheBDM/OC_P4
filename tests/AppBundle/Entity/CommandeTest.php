@@ -25,7 +25,7 @@ class CommandeTest extends TestCase
         $billet1 = new Billet();
         $billet2 = new Billet();
 
-        $billet1->setPrixBillet(9);
+        $billet1->setPrixBillet(10);
         $billet2->setPrixBillet(15);
 
         $commande->addBillet($billet1);
