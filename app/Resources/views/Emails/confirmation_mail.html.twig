@@ -18,7 +18,7 @@
                 <h3>Liste des visiteurs :</h3>
                 <ul>
                     {% for billet in commande.billets %}
-                        <li>{{ billet.prenomClient }} {{ billet.nomClient }}</li>
+                        <li>{{ billet.prenomClient }} {{ billet.nomClient }}, né(e) le {{ billet.dateNaissance|date('d/m/Y') }}</li>
                     {% endfor %}
                 </ul>
                 <h3>Votre code de réservation : {{ commande.random }}</h3>
