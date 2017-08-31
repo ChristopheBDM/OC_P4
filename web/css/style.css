@@ -32,3 +32,8 @@ li {
     margin: auto;
     padding: 20px 0 35px 0;
 }
+
+.back-button {
+    margin-top: 45px;
+    margin-bottom: 45px;
+}
