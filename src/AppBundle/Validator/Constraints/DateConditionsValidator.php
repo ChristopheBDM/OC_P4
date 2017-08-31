@@ -32,7 +32,7 @@ class DateConditionsValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint)
     {
         if ($this->dateValidator->halfDayWarning($value->getDatereza(), $value->getBillets())) {
-            $this->context->buildViolation('Un billet de type "Journée" pour le jour même ne peut être 
+            $this->context->buildViolation('Un billet de type "Journée" pour le jour même ne peut pas être 
                 réservé après 14H.')
                 ->atPath('date_reza')
                 ->addViolation();
